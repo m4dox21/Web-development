@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+      .calculator-container {
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .calculator-key {
+        background-color: gray;
+        border: solid 2px black;
+        width: 3em;
+        margin: 5px;
+        height: 3em;
+        float: center;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+
+      .calculator-key:hover {
+        background-color: aqua;
+        cursor: pointer;
+      }
+
+      .double-width {
+        width: 6em;
+      }
+    </style>
+  </head>
+  <body onload="gen()">
+    <div class="calculator-container">
+      <div id="main">
+        <input type="text" id="display" disabled>
+        <br>
+      </div>
+    </div>
+    <script>
+      function gen() {
+        const main = document.getElementById("main");
+        const keys = [
+          [{
+            label: "C",
+            colspan: 2,
+            class: "double-width"
+          }, {
+            label: "<",
+            colspan: 2,
+            class: "double-width"
+          }],
+          ["7", "8", "9", "/"],
+          ["4", "5", "6", "*"],
+          ["1", "2", "3", "-"],
+          [".", "0", "+", "="]
+        ];
+        keys.forEach(row => {
+          const rowDiv = document.createElement("div");
+          rowDiv.classList.add("row");
+          row.forEach(key => {
+            const button = document.createElement("button");
+            button.innerText = key.label || key;
+            button.setAttribute('colspan', key.colspan || 1);
+            button.classList.add("calculator-key");
+            if (key.colspan && key.colspan === 2) {
+              button.classList.add("double-width");
+            }
+            button.addEventListener("click", () => {
+              handleKeyPress(key.label || key);
+            });
+            rowDiv.appendChild(button);
+          });
+          main.appendChild(rowDiv);
+        });
+      }
+
+      function handleKeyPress(key) {
+        const display = document.getElementById("display");
+        const currentValue = display.value;
+        switch (key) {
+          case "C":
+            display.value = "";
+            break;
+          case "<":
+            display.value = currentValue.slice(0, -1);
+            break;
+          case "=":
+            try {
+              const result = eval(currentValue);
+              display.value = result;
+              addToHistory(currentValue + " = " + result);
+            } catch (error) {
+              display.value = "Error";
+            }
+            break;
+          default:
+            display.value += key;
+        }
+      }
+
+      function addToHistory(entry) {
+        const history = document.createElement("div");
+        history.innerText = entry;
+        document.getElementById("main").appendChild(history);
+      }
+    </script>
+  </body>
+</html>
