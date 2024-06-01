@@ -4,12 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// routers modules
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var galleriesRouter = require('./routes/galleries');
+var imagesRouter = require('./routes/images');
+var statsRouter = require('./routes/stats');
 
 var app = express();
 
-// Set up mongoose connection
+// set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 const mongoDB = "mongodb://localhost:27017/GalleryDB";
@@ -29,17 +33,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Przykład własnego middleware.
+// app.use((req, res, next) => {
+  // console.log('Own middleware');
+  // next();
+// })
+
+// routes paths
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
-//***T8***
-var galleriesRouter = require('./routes/galleries');
 app.use('/galleries', galleriesRouter);
-var imagesRouter = require('./routes/images');
 app.use('/images', imagesRouter);
-var statsRouter = require('./routes/stats');
 app.use('/stats', statsRouter);
-//***T8***
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

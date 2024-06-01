@@ -1,20 +1,18 @@
 extends layout
 
 block content
-  h1= title
-  form(method='POST', action='/users/user_add')
+  h1=title
+
+  form(method='POST')
     div.form-group
       label(for='first_name') First Name:
-      input#first_name.form-control(type='text', placeholder='min. 2 litery', name='first_name', required, value=(user && user.first_name ? user.first_name : ''))
-    div.form-group
+      input#first_name.form-control(type='text', placeholder='min. 2 litery' name='first_name' required value=(undefined===user ? '' : user.first_name) )
       label(for='last_name') Last Name:
-      input#last_name.form-control(type='text', placeholder='min. 2 litery', name='last_name', required, value=(user && user.last_name ? user.last_name : ''))
-    div.form-group
+      input#last_name.form-control(type='text', placeholder='min. 2 litery' name='last_name' required value=(undefined===user ? '' : user.last_name))
       label(for='username') Username:
-      input#username.form-control(type='text', placeholder='min. 3 litery', name='username', required, value=(user && user.username ? user.username : ''))
-    div.form-group
+      input#username.form-control(type='text', placeholder='min. 3 litery' name='username' required value=(undefined===user ? '' : user.username))
       label(for='password') Password:
-      input#password.form-control(type='password', placeholder='min. 6 znaków', name='password', required, value='')
+      input#password.form-control(type='password', minlength="8" placeholder='min. 8 litery' name='password' autocmplete='off' required value='' )
     button.btn.btn-primary(type='submit') Submit
 
   if errors

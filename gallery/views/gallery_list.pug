@@ -5,6 +5,6 @@ block content
   if gallery_list.length
     each gallery in gallery_list
       ul
-        li #{gallery.name}; #{gallery.description}; #{gallery.updated}; #{gallery.user.nazwisko}
+        li Galeria: #{gallery.name}; Opis: #{gallery.description}; #{gallery.updated}; User: #{gallery.user.last_name}
   else
     p There are no any galleries.
