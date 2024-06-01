@@ -1,0 +1,25 @@
+extends layout
+block content
+  h1= title
+  form(method='POST')
+    div.form-group
+      label(for='s_gallery') Select gallery:
+      // lista rozwijana wyboru galerii
+      // select#s_gallery.form-control(name='s_gallery' required onchange='if(this.value != 0) { this.form.submit(); }')
+      select#s_gallery.form-control(name='s_gallery' required)
+        for gallery in galleries
+          option(value=gallery._id) #{gallery.name}
+    button.btn.btn-primary(type='submit') Submit
+  if images.length
+    each image in images
+      div.container
+        h2 #{image.name}
+        a Description: #{image.description}
+        //img(src=image.path alt=image.path style='height:200px; display:block; ')
+        img.img-responsive(src=image.path alt=image.path style='height:200px; display:block; ')
+  else
+    p There are no any images.
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

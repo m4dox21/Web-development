@@ -15,4 +15,9 @@ router.get("/gallery_add", authenticate, gallery_controller.gallery_add_get);
 // GALLERY ADD POST (/galleries/gallery_add)
 router.post("/gallery_add", authenticate, gallery_controller.gallery_add_post);
 
+// GALLERY BROWSE GET
+router.get("/gallery_browse", gallery_controller.gallery_browse);
+// GALLERY BROWSE POST
+router.post("/gallery_browse", gallery_controller.gallery_browse);
+
 module.exports = router;

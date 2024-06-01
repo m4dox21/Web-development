@@ -62,4 +62,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.use('/galleries', express.static(path.join(__dirname, 'public/images')));
+
 module.exports = app;

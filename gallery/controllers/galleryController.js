@@ -1,7 +1,7 @@
 // Import modułów z modelami.
 const Gallery = require("../models/gallery");
 const User = require("../models/user");
-
+const Image = require("../models/image");
 
 // Import funkcji obsługi wyjątków/błedów wywołań asynchronicznych.
 const asyncHandler = require("express-async-handler");
@@ -127,3 +127,15 @@ exports.gallery_add_post = [
     }
   }),
 ];
+
+// Kontroler GET
+exports.gallery_browse = asyncHandler(async (req, res, next) => {
+  const all_galleries = await Gallery.find({}).exec();
+  res.render("gallery_browse", { title: "Select gallery:", galleries: all_galleries});
+  });
+  // Kontroler POST
+exports.gallery_browse = asyncHandler(async (req, res, next) => {
+  const all_galleries = await Gallery.find({}).exec();
+  const gallery_images = await Image.find({gallery: req.body.s_gallery}).exec();
+  res.render("gallery_browse", { title: "View gallery:", galleries: all_galleries, images: gallery_images});
+});
