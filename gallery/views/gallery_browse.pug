@@ -22,13 +22,13 @@ block content
                 h5.card-title= image.name
                 p.card-text
                   | Nazwa: #{image.name} Rozmiar: #{Math.round(image.size / 1024)} KB
-                div.button-group
+                div.button-group.btn-group-sm
                   form(action=`/images/${image._id}` method='get' style='display:inline;')
-                    button.btn.btn-secondary(type='submit') Pokaż
+                    button.btn.btn-secondary.btn-sm(type='submit') Pokaż
                   form(action=`/images/${image._id}/update` method='get' style='display:inline;')
-                    button.btn.btn-warning(type='submit') Update
+                    button.btn.btn-warning.btn-sm.mx-1(type='submit') Update
                   form(action=`/images/${image._id}/delete` method='post' style='display:inline;')
-                    button.btn.btn-danger(type='submit') Delete
+                    button.btn.btn-danger.btn-sm(type='submit') Delete
 
   else
     p There are no any images.
