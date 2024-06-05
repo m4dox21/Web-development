@@ -1,25 +1,82 @@
 const Image = require("../models/image");
-
+const Gallery = require("../models/gallery");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require('express-validator');
 
+// List images
 exports.image_list = asyncHandler(async (req, res, next) => {
   const all_images = await Image.find({}).populate("gallery").exec();
-  //res.render("image_list", { title: "List of all images:", image_list: all_images, logged_user: req.user.username });
-  res.render("image_list", { title: "List of all images:", image_list: all_images});
-  // res.send(all_images);
+  res.render("image_list", { title: "List of all images:", image_list: all_images });
+});
+
+// Show image details
+exports.image_show_get = asyncHandler(async (req, res, next) => {
+  const image = await Image.findById(req.params.id).exec();
+  if (!image) { // No results.
+    const err = new Error('Image not found');
+    err.status = 404;
+    return next(err);
+  }
+  res.render('image_detail', { title: 'Image Detail', image: image });
+});
+
+// Update image - GET
+exports.image_update_get = asyncHandler(async (req, res, next) => {
+  const image = await Image.findById(req.params.id).exec();
+  const all_galleries = await Gallery.find({}).populate("user").exec();
+  if (!image) { // No results.
+    const err = new Error('Image not found');
+    err.status = 404;
+    return next(err);
+  }
+  res.render('image_update', { title: 'Update Image', image: image, galleries: all_galleries });
+});
+
+// Update image - POST
+exports.image_update_post = [
+  body('i_name').trim().isLength({ min: 2 }).escape().withMessage('Name too short.'),
+  body('i_description').trim().isLength({ min: 5 }).escape().withMessage('Description too short.'),
+  body('i_path').trim().isLength({ min: 3 }).escape().withMessage('Path too short.'),
+  body('i_gallery').notEmpty().withMessage('Select a gallery'),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const image = new Image({
+      _id: req.params.id,
+      name: req.body.i_name,
+      description: req.body.i_description,
+      path: req.body.i_path,
+      gallery: req.body.i_gallery,
+    });
+
+    if (!errors.isEmpty()) {
+      const galleries = await Gallery.find().exec();
+      res.render('image_form', {
+        title: 'Update Image',
+        image,
+        galleries,
+        errors: errors.array()
+      });
+      return;
+    } else {
+      await Image.findByIdAndUpdate(req.params.id, image, {});
+      res.redirect('/images');
+    }
+  })
+];
+
+// Delete image - POST
+exports.image_delete_post = asyncHandler(async (req, res, next) => {
+  await Image.findByIdAndDelete(req.params.id);
+  res.redirect('/images');
 });
 
 
-// Import modeli
-const Gallery = require("../models/gallery");
-const User = require("../models/user");
-
 // IMAGE ADD GET
-
 exports.image_add_get = asyncHandler(async (req, res, next) => {
   const all_galleries = await Gallery.find({}).populate("user").exec();
-  res.render("image_form", { title: "add image:", galleries: all_galleries });
+  res.render("image_form", { title: "Add Image", galleries: all_galleries });
 });
 
 exports.image_add_post = [
@@ -36,7 +93,6 @@ exports.image_add_post = [
           description: req.body.i_description,
           path: req.body.i_path,
           gallery: req.body.i_gallery,
-          
       });
 
       if (!errors.isEmpty()) {
