@@ -12,23 +12,23 @@ block content
     button.btn.btn-primary(type='submit') Submit
 
   if images.length
-    each image in images
-      div.container
-        //- h2 #{image.name}
-        //- a Description: #{image.description}
-        img.img-responsive(src=image.path alt=image.path style='height:200px; display:block;')
-        
-        // Informacje o nazwie i rozmiarze
-        p Nazwa: #{image.name} Rozmiar: #{Math.round(image.size / 1024)} KB
-
-        // Przyciski Pokaż, Update, Delete pod każdym obrazem
-        div.button-group
-          form(action=`/images/${image._id}` method='get' style='display:inline;')
-            button.btn.btn-secondary(type='submit') Pokaż
-          form(action=`/images/${image._id}/update` method='get' style='display:inline;')
-            button.btn.btn-warning(type='submit') Update
-          form(action=`/images/${image._id}/delete` method='post' style='display:inline;')
-            button.btn.btn-danger(type='submit') Delete
+    .container
+      .row
+        each image in images
+          .col-md-3.mb-4
+            .card
+              img.card-img-top(src=image.path alt=image.name style='height:200px; object-fit: cover;')
+              .card-body
+                h5.card-title= image.name
+                p.card-text
+                  | Nazwa: #{image.name} Rozmiar: #{Math.round(image.size / 1024)} KB
+                div.button-group
+                  form(action=`/images/${image._id}` method='get' style='display:inline;')
+                    button.btn.btn-secondary(type='submit') Pokaż
+                  form(action=`/images/${image._id}/update` method='get' style='display:inline;')
+                    button.btn.btn-warning(type='submit') Update
+                  form(action=`/images/${image._id}/delete` method='post' style='display:inline;')
+                    button.btn.btn-danger(type='submit') Delete
 
   else
     p There are no any images.
