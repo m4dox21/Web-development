@@ -1,5 +1,5 @@
 // Import modułów z modelam.
-const User = require("../models/user");
+const User = require('../models/user');
 
 // Import funkcji obsługi wyjątków/błedów wywołań asynchronicznych.
 const asyncHandler = require("express-async-handler");
@@ -9,7 +9,7 @@ const { body, validationResult } = require("express-validator");
 
 // Import modułów do szyfrowania i autentykacji
 const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 //local storage
 
 // Kontroler listy userów.
@@ -105,50 +105,37 @@ exports.user_login_get = (req, res, next) => {
 };
 
 // Kontroler obsługi danych formularza logowania - POST.
-exports.user_login_post = (req, res, next) => {
-  let username = req.body.username
-  let password = req.body.password
+exports.user_login_post = async (req, res) => {
+  try {
+    const { username, password } = req.body;
 
-  // wyszukanie w bazie rekord/dokument użytkownika username i podstaw pod obiekt user
-  User.findOne({ username })
-    .then((user) => {
-      // jeśli jest to sprawdź hasło 
-      if (user) {
-        bcrypt.compare(password, user.password, function (err, result) {
-          // pojawił się jakiś błąd w sprawdzaniu hasła - zwróć błąd, tu jako obiekt JSON
-          if (err) {
-            // res.json({
-            //   error: err
-            // })
-            res.send('Password checking error!')
-          }
-          if (result) {
-            // hasło prawidłowe - wygeneruj i wyślij token w cookie
-            let token = jwt.sign({ username: user.username }, 'kodSzyfrujacy', { expiresIn: '1h' })
-            //  res.json({
-            //   message: 'Zalogowano',
-            //   token: token,
-            //   }
-            // es.cookie('mytoken', token, {maxAge: 600000, httpOnly: true })
-            res.cookie('mytoken', token, {maxAge: 600000})
-            res.render('index', { title: 'Express' });
-          } else {
-            // hasło nieprawidłowe - wyślij jako obiekt JSON
-            // res.json({
-            //   message: 'Bad password'
-            // })
-            res.send('Bad password')
-          }
-        })
-      } else {
-        // użytkownik nieznaleziony - wyślij jako obiekt JSON
-        // res.json({
-        //   message: 'No user found!'
-        // })
-        res.send('No user found!')
-      }
-    })
-}
+    // Znajdź użytkownika po nazwie użytkownika
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(400).send('Invalid username or password');
+    }
+
+    // Porównaj hasła
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(400).send('Invalid username or password');
+    }
+
+    console.log('Generating token for user:', user._id);
+
+    // Generuj token z użytkownikiem _id i username
+    const token = jwt.sign({ _id: user._id.toString(), username: user.username }, 'kodSzyfrujacy', { expiresIn: '1h' });
+
+    // Ustaw token jako ciasteczko
+    res.cookie('mytoken', token, { httpOnly: true });
+
+    // Przekieruj do strony głównej lub dowolnej strony
+    res.redirect('/images');
+  } catch (err) {
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 // Kontroler wylogowania - GET.
 exports.user_logout_get = (req, res, next) => {

@@ -1,5 +1,6 @@
 const Image = require("../models/image");
 const Gallery = require("../models/gallery");
+const User = require("../models/user");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require('express-validator');
 
@@ -75,38 +76,74 @@ exports.image_delete_post = asyncHandler(async (req, res, next) => {
 
 // IMAGE ADD GET
 exports.image_add_get = asyncHandler(async (req, res, next) => {
-  const all_galleries = await Gallery.find({}).populate("user").exec();
-  res.render("image_form", { title: "Add Image", galleries: all_galleries });
+  let galleries;
+  if (req.user.username === 'admin') {
+    galleries = await Gallery.find({}).exec();
+  } else {
+    const user = await User.findOne({ username: req.user.username }).exec();
+    galleries = await Gallery.find({ user: user._id }).exec();
+  }
+
+  res.render('image_form', { title: 'Add Image', galleries: galleries });
 });
 
+
 exports.image_add_post = [
-  body('i_name').trim().isLength({ min: 2 }).escape().withMessage('Name too short.'),
-  body('i_description').trim().isLength({ min: 5 }).escape().withMessage('Description too short.'),
-  body('i_path').trim().isLength({ min: 3 }).escape().withMessage('Path too short.'),
-  body('i_gallery').notEmpty().withMessage('Select a gallery'),
+  body('i_name', 'Image name too short.').trim().isLength({ min: 2 }).escape(),
+  body('i_description').trim().escape(),
+  body('i_path').trim().isLength({ min: 3 }).escape(),
+  body('i_gallery', 'Gallery must be selected.').trim().isLength({ min: 1 }).escape(),
 
   asyncHandler(async (req, res, next) => {
-      const errors = validationResult(req);
+    const errors = validationResult(req);
 
-      const image = new Image({
-          name: req.body.i_name,
-          description: req.body.i_description,
-          path: req.body.i_path,
-          gallery: req.body.i_gallery,
-      });
+    const image = new Image({
+      name: req.body.i_name,
+      description: req.body.i_description,
+      path: req.body.i_path,
+      gallery: req.body.i_gallery,
+    });
 
-      if (!errors.isEmpty()) {
-          const galleries = await Gallery.find().exec();
-          res.render('image_form', {
-              title: 'Add Image',
-              image,
-              galleries,
-              errors: errors.array()
-          });
-          return;
+    const gallery = await Gallery.findById(req.body.i_gallery).exec();
+
+    if (!errors.isEmpty()) {
+      let galleries;
+      if (req.user.username === 'admin') {
+        galleries = await Gallery.find({}).exec();
       } else {
-          await image.save();
-          res.redirect('/images'); // Redirect to the list of images or any other page
+        const user = await User.findOne({ username: req.user.username }).exec();
+        galleries = await Gallery.find({ user: user._id }).exec();
       }
-  })
+
+      res.render('image_form', {
+        title: 'Add Image',
+        galleries: galleries,
+        image: image,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      if (!gallery) {
+        res.send('Gallery not found');
+        return;
+      }
+
+      if (req.user.username !== 'admin') {
+        // Ensure both gallery.user and req.user._id are defined
+        if (!gallery.user || !req.user._id) {
+            res.send('Permission denied');
+            return;
+        }
+    
+        // Check if the gallery user matches the logged-in user
+        if (gallery.user.toString() !== req.user._id.toString()) {
+            res.send('Permission denied');
+            return;
+        }
+    }    
+
+      await image.save();
+      res.redirect('/images');
+    }
+  }),
 ];

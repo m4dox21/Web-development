@@ -2,6 +2,7 @@
 const Gallery = require("../models/gallery");
 const User = require("../models/user");
 const Image = require("../models/image");
+const authenticate = require('../middleware/authenticate');
 
 // Import funkcji obsługi wyjątków/błedów wywołań asynchronicznych.
 const asyncHandler = require("express-async-handler");

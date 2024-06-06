@@ -1,22 +1,34 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
     try {
-        // przysłany token
         const token = req.cookies.mytoken;
-        // dekoduj token
-        const decode = jwt.verify(token, 'kodSzyfrujacy')
-        // dodanie do request (req.user) danych zweryfikowanego usera 
-        req.user = decode
-        next()
-    }
-    catch (err) {
-        //res.redirect('/users/user_login')
-        // res.json({
-        //     message: 'Brak dostępu'
-        // })
-        res.send('Login in first!')
-    }
-}
+        if (!token) {
+            console.log('Token not found');
+            return res.send('Login in first!');
+        }
 
-module.exports = authenticate
+        const decoded = jwt.verify(token, 'kodSzyfrujacy');
+        console.log('Decoded token:', decoded);
+
+        const userId = decoded._id;
+        console.log('User ID from token:', userId);
+
+        const user = await User.findById(userId).exec();
+        if (!user) {
+            console.log('User not found');
+            return res.send('Login in first!');
+        }
+
+        req.user = user;
+        console.log('Authenticated user:', req.user);
+
+        next();
+    } catch (err) {
+        console.log('Authentication error:', err);
+        res.send('Login in first!');
+    }
+};
+
+module.exports = authenticate;
