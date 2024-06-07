@@ -1,0 +1,70 @@
+[{
+  "_id": {
+    "$oid": "665b2fac1cf408494e430921"
+  },
+  "name": "Galeria testowa",
+  "description": "test",
+  "updated": {
+    "$date": "2024-06-01T14:26:52.132Z"
+  },
+  "user": {
+    "$oid": "665b2f961cf408494e430919"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66607e3144a2bcee4122729e"
+  },
+  "name": "Koty",
+  "description": "Galeria z obrazkami kotów",
+  "updated": {
+    "$date": "2024-06-05T15:03:13.012Z"
+  },
+  "user": {
+    "$oid": "665b2f961cf408494e430919"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660876d44a2bcee4122739a"
+  },
+  "name": "Galeria Ewy",
+  "description": "Test galeria ewy",
+  "updated": {
+    "$date": "2024-06-05T15:42:37.583Z"
+  },
+  "user": {
+    "$oid": "6660869c44a2bcee41227382"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66624cf3829913d5577bf104"
+  },
+  "name": "test galery 07062024",
+  "description": "test",
+  "updated": {
+    "$date": "2024-06-06T23:57:39.653Z"
+  },
+  "user": {
+    "$oid": "6661bb2bb27ae0c2d458de34"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666254c17073a9a10993fac9"
+  },
+  "name": "galewy",
+  "description": "gaewr",
+  "updated": {
+    "$date": "2024-06-07T00:30:57.480Z"
+  },
+  "user": {
+    "$oid": "6660869c44a2bcee41227382"
+  },
+  "__v": 0
+}]
