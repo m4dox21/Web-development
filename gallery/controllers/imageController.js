@@ -24,13 +24,20 @@ exports.image_show_get = asyncHandler(async (req, res, next) => {
 // Update image - GET
 exports.image_update_get = asyncHandler(async (req, res, next) => {
   const image = await Image.findById(req.params.id).exec();
-  const all_galleries = await Gallery.find({}).populate("user").exec();
   if (!image) { // No results.
     const err = new Error('Image not found');
     err.status = 404;
     return next(err);
   }
-  res.render('image_update', { title: 'Update Image', image: image, galleries: all_galleries });
+
+  let galleries;
+  if (req.user.username === 'admin') {
+    galleries = await Gallery.find({}).exec();
+  } else {
+    galleries = await Gallery.find({ user: req.user._id }).exec();
+  }
+
+  res.render('image_update', { title: 'Update Image', image: image, galleries: galleries });
 });
 
 // Update image - POST
@@ -51,9 +58,17 @@ exports.image_update_post = [
       gallery: req.body.i_gallery,
     });
 
+    const gallery = await Gallery.findById(req.body.i_gallery).exec();
+
     if (!errors.isEmpty()) {
-      const galleries = await Gallery.find().exec();
-      res.render('image_form', {
+      let galleries;
+      if (req.user.username === 'admin') {
+        galleries = await Gallery.find({}).exec();
+      } else {
+        galleries = await Gallery.find({ user: req.user._id }).exec();
+      }
+
+      res.render('image_update', {
         title: 'Update Image',
         image,
         galleries,
@@ -61,6 +76,18 @@ exports.image_update_post = [
       });
       return;
     } else {
+      if (!gallery) {
+        res.send('Gallery not found');
+        return;
+      }
+
+      if (req.user.username !== 'admin') {
+        if (!gallery.user || !req.user._id || gallery.user.toString() !== req.user._id.toString()) {
+          res.send('Permission denied');
+          return;
+        }
+      }
+
       await Image.findByIdAndUpdate(req.params.id, image, {});
       res.redirect('/images');
     }
@@ -69,10 +96,21 @@ exports.image_update_post = [
 
 // Delete image - POST
 exports.image_delete_post = asyncHandler(async (req, res, next) => {
+  const image = await Image.findById(req.params.id).populate('gallery').exec();
+
+  if (!image) {
+    res.send('Image not found');
+    return;
+  }
+
+  if (req.user.username !== 'admin' && (!image.gallery.user || image.gallery.user.toString() !== req.user._id.toString())) {
+    res.send('Permission denied');
+    return;
+  }
+
   await Image.findByIdAndDelete(req.params.id);
   res.redirect('/images');
 });
-
 
 // IMAGE ADD GET
 exports.image_add_get = asyncHandler(async (req, res, next) => {
@@ -80,14 +118,13 @@ exports.image_add_get = asyncHandler(async (req, res, next) => {
   if (req.user.username === 'admin') {
     galleries = await Gallery.find({}).exec();
   } else {
-    const user = await User.findOne({ username: req.user.username }).exec();
-    galleries = await Gallery.find({ user: user._id }).exec();
+    galleries = await Gallery.find({ user: req.user._id }).exec();
   }
 
   res.render('image_form', { title: 'Add Image', galleries: galleries });
 });
 
-
+// IMAGE ADD POST
 exports.image_add_post = [
   body('i_name', 'Image name too short.').trim().isLength({ min: 2 }).escape(),
   body('i_description').trim().escape(),
@@ -111,8 +148,7 @@ exports.image_add_post = [
       if (req.user.username === 'admin') {
         galleries = await Gallery.find({}).exec();
       } else {
-        const user = await User.findOne({ username: req.user.username }).exec();
-        galleries = await Gallery.find({ user: user._id }).exec();
+        galleries = await Gallery.find({ user: req.user._id }).exec();
       }
 
       res.render('image_form', {
@@ -129,18 +165,11 @@ exports.image_add_post = [
       }
 
       if (req.user.username !== 'admin') {
-        // Ensure both gallery.user and req.user._id are defined
-        if (!gallery.user || !req.user._id) {
-            res.send('Permission denied');
-            return;
+        if (!gallery.user || !req.user._id || gallery.user.toString() !== req.user._id.toString()) {
+          res.send('Permission denied');
+          return;
         }
-    
-        // Check if the gallery user matches the logged-in user
-        if (gallery.user.toString() !== req.user._id.toString()) {
-            res.send('Permission denied');
-            return;
-        }
-    }    
+      }
 
       await image.save();
       res.redirect('/images');
