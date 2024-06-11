@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method='POST')
+    div.form-group
+      label(for='s_gallery') Select gallery:
+      select#s_gallery.form-control(name='s_gallery' required)
+        for gallery in galleries
+          option(value=gallery._id) #{gallery.name}
+    button.btn.btn-primary(type='submit') Submit
+
+  if images.length
+    .container
+      .row
+        each image in images
+          .col-md-3.mb-4
+            .card
+              img.card-img-top(src=image.path alt=image.name style='height:200px; object-fit: cover;')
+              .card-body
+                h5.card-title= image.name
+                div.button-group.btn-group-sm
+                  form(action=`/images/${image._id}` method='get' style='display:inline;')
+                    button.btn.btn-secondary.btn-sm(type='submit') Pokaż
+                  form(action=`/images/${image._id}/update` method='get' style='display:inline;')
+                    button.btn.btn-warning.btn-sm.mx-1(type='submit') Update
+                  form(action=`/images/${image._id}/delete` method='post' style='display:inline;')
+                    button.btn.btn-danger.btn-sm(type='submit') Delete
+
+  else
+    p There are no any images.
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

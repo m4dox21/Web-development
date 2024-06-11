@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  p Name: #{image.name}
+  p Description: #{image.description}
+  img(src=image.path alt=image.name)
