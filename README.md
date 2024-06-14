@@ -29,4 +29,4 @@ Aplikacja wykorzystuje połączenie z bazą GalleryDB, która składa się z 3 t
 **images** - zawierającej takie informacje jak nazwa obrazka, opis obrazka, informacja o wysłanym obrazku, id galerii do której zostanie przypisany.  
 **users** - zawierającej informacje o imieniu, nazwisku, nazwie użytkownika oraz haśle.
 
-W pliku GalleryDB.galleries znajduje się przykładowa baza danych służaca sprawdzeniu działania aplikacji.
+W plikach GalleryDB.galleries, GalleryDB.users, GalleryDB.images znajdują się przykładowe rekordy służace sprawdzeniu działania aplikacji.
