@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "665b2f961cf408494e430919"
+  },
+  "first_name": "jan",
+  "last_name": "kowal",
+  "username": "admin",
+  "password": "$2b$10$lhn1osXoxmBhik66ir.xC.UyxAiaa.K9pCTAr3xFj3kvR/.mJMPRq",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660866144a2bcee41227375"
+  },
+  "first_name": "Jan",
+  "last_name": "Kowalski",
+  "username": "jankowalski",
+  "password": "$2b$10$j.tmCwXOp0G8FvS6UgZ5WO2n5CsstvKSJTpYeEbs0e75Q0UpU/NTi",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660868044a2bcee4122737a"
+  },
+  "first_name": "Anna",
+  "last_name": "Nowak",
+  "username": "annanowak",
+  "password": "$2b$10$SeM3OpC5Fx0M3WFaimB5NOGtoxSWk8OubfnVmYcqOAuX2da9XflGe",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660868e44a2bcee4122737e"
+  },
+  "first_name": "Piotr",
+  "last_name": "Wiśniewski",
+  "username": "piotrwisniewski",
+  "password": "$2b$10$ICXc9bC0ZnVVXDyXfzXyw.1nSA7Z0eTtytTh86Sf/OR/B3yZeF5I2",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6660869c44a2bcee41227382"
+  },
+  "first_name": "Ewa",
+  "last_name": "Kaczmarek",
+  "username": "ewakaczmarek",
+  "password": "$2b$10$gKmYiGOUIkwBrY1BgT0iGO4lh/CUuIm3lKJntpGpK/hLq.4E6xf5e",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666086cd44a2bcee41227386"
+  },
+  "first_name": "Michał",
+  "last_name": "Lewandowski",
+  "username": "michallewandowski",
+  "password": "$2b$10$ORuSiQ2aWRK0R0WgXyWXy.r7Li2ybRsLTvGcQEBWtvh93BdzTgc9y",
+  "__v": 0
+}]

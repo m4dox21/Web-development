@@ -1,0 +1,96 @@
+[{
+  "_id": {
+    "$oid": "66607e0744a2bcee41227293"
+  },
+  "name": "samochod_3",
+  "description": "samochod_3.jpg",
+  "path": "volkswagen_id3_1st_26-large.jpg",
+  "gallery": {
+    "$oid": "665b2fac1cf408494e430921"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66607e4544a2bcee412272a5"
+  },
+  "name": "Kot_2",
+  "description": "Kot_2.jpg",
+  "path": "slider - koty fakty i mity.jpg",
+  "gallery": {
+    "$oid": "66607e3144a2bcee4122729e"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66607e7644a2bcee412272bc"
+  },
+  "name": "kot_syberyjski",
+  "description": "kot_syberyjski.jpeg",
+  "path": "kot-syberyjski2.jpeg",
+  "gallery": {
+    "$oid": "66607e3144a2bcee4122729e"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66607e8d44a2bcee412272c2"
+  },
+  "name": "samochod_4",
+  "description": "samochod_4.webp",
+  "path": "4WXk9kpTURBXy9jNTA3ODBjOGM1YzgwMjc2MGY0NGNjMGQ1YWI1ZjY4ZC5qcGeSlQMAzPTNBRTNAtyTBc0EsM0CpN4AAqEwBaExAA.webp",
+  "gallery": {
+    "$oid": "665b2fac1cf408494e430921"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "666080b644a2bcee41227320"
+  },
+  "name": "kot_3",
+  "description": "kot_3.jpg",
+  "path": "107091667.jpg",
+  "gallery": {
+    "$oid": "665b2fac1cf408494e430921"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6661b5a4cccabf05dbb68bc3"
+  },
+  "name": "kottt",
+  "description": "kot_test",
+  "path": "slider - koty fakty i mity.jpg",
+  "gallery": {
+    "$oid": "6660876d44a2bcee4122739a"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6661be6ba726f71034d26cd9"
+  },
+  "name": "kot ewy test",
+  "description": "update przeniesienie",
+  "path": "slider - koty fakty i mity.jpg",
+  "gallery": {
+    "$oid": "665b2fac1cf408494e430921"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66624cfb829913d5577bf10d"
+  },
+  "name": "testimg",
+  "description": "test222",
+  "path": "samochód-w-rozliczeniu-a-leasing.png",
+  "gallery": {
+    "$oid": "665b2fac1cf408494e430921"
+  },
+  "__v": 0
+}]
